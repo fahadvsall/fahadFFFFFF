@@ -1,53 +1,21 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>جاري التحميل...</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #ffd700;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 2.5rem;
-      overflow: hidden;
-    }
-    h1 {
-      margin: 0.5rem;
-      text-shadow: 0 0 15px #ff4500;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-  </style>
+  <title>صوت + تنبيه</title>
 </head>
-<body>
-  <h1>صلو على النبي ﷺ</h1>
-  <p style="font-size:1.5rem; opacity:0.8;">جاري الإرسال...</p>
+<body style="background:#000;color:#fff;text-align:center;padding-top:30vh;font-size:3rem;">
+  <div>صلو على النبي ﷺ</div>
+
+  <audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const msg = "صلو على النبي ﷺ";
-
-    // يطلع الـ alert 3 مرات فقط كما طلبت
     alert(msg);
-    setTimeout(() => alert(msg), 1200);
-    setTimeout(() => alert(msg), 2400);
-
-    // محاولة إضافية لو فيه إمكانية داخلية (no-cors عشان ما يعلق)
-    fetch('/chatResult', {
-      method: 'POST',
-      body: JSON.stringify({ message: msg + " ﷺ" }),
-      mode: 'no-cors'
-    }).catch(() => {});
+    setTimeout(() => alert(msg), 1500);
+    setTimeout(() => alert(msg), 3000);
   </script>
 </body>
 </html>
